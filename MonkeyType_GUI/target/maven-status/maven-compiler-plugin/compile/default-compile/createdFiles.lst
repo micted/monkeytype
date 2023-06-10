@@ -1,0 +1,12 @@
+model\Language.class
+view\View.class
+controller\TestController.class
+model\TestResult1.class
+config\AppConfig.class
+view\View1.class
+controller\TestController_1$1.class
+model\Word.class
+controller\TestController_1.class
+view\Main.class
+model\TestResult.class
+util\DictionaryLoader.class

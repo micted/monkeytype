@@ -1,0 +1,20 @@
+/* styles.css */
+.green {
+    -fx-fill: green;
+}
+
+.red {
+    -fx-fill: red;
+}
+
+.orange {
+    -fx-fill: orange;
+}
+
+.gray {
+    -fx-fill: gray;
+}
+
+.black {
+    -fx-fill: black;
+}

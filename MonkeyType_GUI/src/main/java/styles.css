@@ -1,0 +1,19 @@
+.default-text {
+    -fx-font-size: 18;
+    -fx-fill: black;
+}
+
+.correct-text {
+    -fx-font-size: 18;
+    -fx-fill: green;
+}
+
+.incorrect-text {
+    -fx-font-size: 18;
+    -fx-fill: red;
+}
+
+.not-entered-text {
+    -fx-font-size: 18;
+    -fx-fill: gray;
+}
