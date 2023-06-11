@@ -1,4 +1,3 @@
-model\Language.class
 view\View.class
 controller\TestController.class
 model\TestResult1.class

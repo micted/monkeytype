@@ -18,4 +18,9 @@ public class Language {
     public List<String> getDictionary() {
         return dictionary;
     }
+    
+    @Override
+    public String toString() {
+        return getName(); // Return the name of the language as the string representation
+    }
 }

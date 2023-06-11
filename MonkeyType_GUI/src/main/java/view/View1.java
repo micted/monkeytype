@@ -20,6 +20,7 @@ import java.net.URL;
 
 import java.util.List;
 import javafx.stage.Stage;
+import model.Language;
 import model.TestResult1;
 import model.Word;
 
@@ -49,6 +50,15 @@ public class View1 {
         // Center area for test text and user input
         centerBox = createCenterBox();
         root.setCenter(centerBox);
+        
+        
+        // Language selection
+        ComboBox<Language> languageComboBox = createLanguageComboBox(); // Implement this method to create the language selection component
+        languageComboBox.setOnAction(event -> {
+            Language selectedLanguage = languageComboBox.getValue();
+            testController.selectLanguage(selectedLanguage);
+        });
+        root.setTop(languageComboBox);
 
         Scene scene = new Scene(root, 800, 600);
         File cssFile = new File("C://Users//Hp//Documents//PJAIT documents//GUI//Monkeytype//MonkeyType_GUI//src//main//java//styles/styles.css");
@@ -60,8 +70,8 @@ public class View1 {
         primaryStage.show();
 
         // Generate and display test text
-        String dummyParagraph = "This is a dummy paragraph for testing color variation.";
-        displayTestText(dummyParagraph);
+        //String dummyParagraph = "This is a dummy paragraph for testing color variation.";
+        //displayTestText(dummyParagraph);
     }
 
 
@@ -111,7 +121,7 @@ public class View1 {
             // Split the input into words
             String[] inputWords = input.split(" ");
             System.out.println();            
-            String[] paragraphWords = dummyParagraph.split(" ");
+            String[] paragraphWords = AppConfig.getCurrentParagraph().split(" ");
             
             
 
@@ -169,4 +179,23 @@ public class View1 {
             statisticsText.setText(statistics);
         });
     }
+    
+    
+    private ComboBox<Language> createLanguageComboBox() {
+        ComboBox<Language> languageComboBox = new ComboBox<>();
+
+        // Load available languages from the test controller
+        List<Language> availableLanguages = testController.getAvailableLanguages();
+
+        // Add available languages to the combo box
+        languageComboBox.getItems().addAll(availableLanguages);
+
+        // Set a default selection
+        if (!availableLanguages.isEmpty()) {
+            languageComboBox.setValue(availableLanguages.get(0));
+        }
+
+        return languageComboBox;
+    }
+
 }

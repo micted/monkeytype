@@ -1,6 +1,7 @@
 package controller;
 
 import config.AppConfig;
+import java.io.File;
 import model.Language;
 import model.TestResult1;
 import model.Word;
@@ -31,11 +32,12 @@ public class TestController_1 {
     private StringBuilder userInput;
     private TestResult1 testResult;
     private Timer timer;    
-    String directoryPath = "dictionary";
+    String directoryPath = "C:\\Users\\Hp\\Documents\\PJAIT documents\\GUI\\Monkeytype\\MonkeyType_GUI\\src\\main\\java\\dictionary";
 
     public TestController_1() {
         
         this.availableLanguages = DictionaryLoader.loadAvailableLanguages(directoryPath);
+        System.out.println(this.availableLanguages);
         this.testDuration = DEFAULT_TEST_DURATION;
     }
 
@@ -71,9 +73,11 @@ public class TestController_1 {
             }
 
             //AppConfig.getView().displayTestText(buildParagraphText());
-            AppConfig.getView().displayTestText("hello man this is test text to check text coloring while typing");
-            System.out.println(AppConfig.getView());
+            String paragraphText = buildParagraphText();
+            AppConfig.setCurrentParagraph(paragraphText);
+            AppConfig.getView().displayTestText(paragraphText);
             startTimer();
+            
         }
     }
     
@@ -85,18 +89,19 @@ public class TestController_1 {
     private List<String> loadLanguageDictionary(Language language) {
         // Assuming you have a dictionary file associated with each language
         String dictionaryFileName = language.getName() + ".txt";
-        // Implement the logic to load the dictionary from the file
-        // You can use file reading techniques or any other approach that fits your project structure
-        // Return the list of dictionary words
-        // Example implementation using Files.readAllLines:
+        // Construct the absolute path to the dictionary file
+        String absolutePath = directoryPath + File.separator + dictionaryFileName;
+
         try {
-            Path dictionaryPath = Paths.get(dictionaryFileName);
+            Path dictionaryPath = Paths.get(absolutePath);
             return Files.readAllLines(dictionaryPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return Collections.emptyList(); // Return an empty list if there was an error loading the dictionary
     }
+
 
     private String buildParagraphText() {
         StringBuilder paragraphText = new StringBuilder();

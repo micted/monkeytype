@@ -29,12 +29,12 @@ public class DictionaryLoader {
                 // Iterate over the files and create Language objects
                 for (File file : files) {
                     if (file.isFile()) {
-                        String fileName = file.getName();
+                        String fileName = file.getName();                        
                         String languageName = fileName.substring(0, fileName.lastIndexOf('.'));
                         Path filePath = Paths.get(file.getAbsolutePath());
 
                         // Read the file content and create a Language object
-                        List<String> lines = Files.readAllLines(filePath);
+                        List<String> lines = Files.readAllLines(filePath);                        
                         Language language = new Language(languageName, lines);
                         availableLanguages.add(language);
                     }
@@ -43,9 +43,20 @@ public class DictionaryLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
         return availableLanguages;
     }
+    
+    public static String[] convertLanguageListToStringArray(List<Language> languageList) {
+        String[] languageNames = new String[languageList.size()];
+
+        for (int i = 0; i < languageList.size(); i++) {
+            languageNames[i] = languageList.get(i).getName();
+        }
+
+        return languageNames;
+    }
+
     
     
 }

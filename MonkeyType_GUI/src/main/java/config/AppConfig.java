@@ -13,6 +13,7 @@ import view.View1;
 public class AppConfig {
     private static AppConfig instance;
     private static View1 view;
+    private static String paragraphText;
 
     
     public static View1 getView() {
@@ -21,6 +22,17 @@ public class AppConfig {
 
     public static void setView(View1 view) {
         AppConfig.view = view;
+    }
+    
+    public static void setCurrentParagraph(String paragraphText) {
+        
+        AppConfig.paragraphText = paragraphText;
+        
+    }
+    public static String getCurrentParagraph() {
+        
+        return paragraphText;
+        
     }
 }
 
