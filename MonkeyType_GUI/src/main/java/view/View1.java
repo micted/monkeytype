@@ -80,6 +80,13 @@ public class View1 {
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20);
         centerBox.setPadding(new Insets(10));
+        
+        centerBox.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+        if (testText != null) {
+            testText.setWrappingWidth(newWidth.doubleValue() - 20);
+        }        
+        });
+
 
         // Test text
         testText = new Text();
@@ -109,6 +116,7 @@ public class View1 {
 
     public void displayTestText(String text) {
         Platform.runLater(() -> testText.setText(text));
+        testText.setWrappingWidth(centerBox.getWidth() - 20);
     }
     
     public void updateInputTextArea(String input) {
