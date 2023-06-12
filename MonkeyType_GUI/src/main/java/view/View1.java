@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import model.Language;
 import model.TestResult1;
 import model.Word;
+import util.JumpingLettersAnimation;
 
 public class View1 {
     private Stage primaryStage;
@@ -138,6 +139,8 @@ public class View1 {
 
                 // Create a Text node for each word
                 Text wordText = new Text(paragraphWord);
+                JumpingLettersAnimation animation = new JumpingLettersAnimation(wordText);
+                
 
                 // Apply the default style class
                 wordText.getStyleClass().add("default-text");
@@ -154,6 +157,7 @@ public class View1 {
                         if (j < userWord.length() && userWord.charAt(j) == paragraphChar) {
                             // Apply the "correct" style class
                             wordText.getStyleClass().add("correct-text");
+                            animation.applyAnimation();
                         } else {
                             // Apply the "incorrect" style class
                             wordText.getStyleClass().add("incorrect-text");

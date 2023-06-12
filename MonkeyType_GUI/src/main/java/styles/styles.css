@@ -1,12 +1,32 @@
+/* Animation styles for jumping letters */
+@keyframes jumpingLetters {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+
+
 .default-text {
     -fx-font-size: 18;
     -fx-fill: black;
 }
 
+
 .correct-text {
     -fx-font-size: 18;
     -fx-fill: green;
+    -fx-animation: jumpingLetters 0.5s ease-in-out infinite;
 }
+
+
 
 .incorrect-text {
     -fx-font-size: 18;
