@@ -225,5 +225,9 @@ public class TestController_1 {
         //FileUtil.saveFile(fileName, fileContent.toString());
     }
 
+    public void generateNextParagraph() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     
 }

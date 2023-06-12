@@ -28,6 +28,9 @@ import util.JumpingLettersAnimation;
 public class View1 {
     private Stage primaryStage;
     private TestController_1 testController;
+    
+    private ComboBox<Integer> durationComboBox;
+
 
     // GUI elements
     private Text testText;
@@ -52,6 +55,17 @@ public class View1 {
         centerBox = createCenterBox();
         root.setCenter(centerBox);
         
+        //TIME SELECTION
+        
+        ComboBox<Integer> durationComboBox = createDurationComboBox();
+        
+        durationComboBox.setOnAction(event -> {
+            int selectedDuration = durationComboBox.getValue();
+            testController.setTestDuration(selectedDuration);
+            testController.generateNextParagraph(); // Generate a new paragraph when duration is changed
+        });
+        
+        root.setBottom(durationComboBox);
         
         // Language selection
         ComboBox<Language> languageComboBox = createLanguageComboBox(); // Implement this method to create the language selection component
@@ -157,10 +171,11 @@ public class View1 {
                         if (j < userWord.length() && userWord.charAt(j) == paragraphChar) {
                             // Apply the "correct" style class
                             wordText.getStyleClass().add("correct-text");
-                            animation.applyAnimation();
+                            
                         } else {
                             // Apply the "incorrect" style class
                             wordText.getStyleClass().add("incorrect-text");
+                            animation.applyAnimation();
                         }
                     }
                 } else {
@@ -209,5 +224,16 @@ public class View1 {
 
         return languageComboBox;
     }
+    
+    
+    private ComboBox<Integer> createDurationComboBox() {
+        ComboBox<Integer> durationComboBox = new ComboBox<>();
+        durationComboBox.getItems().addAll(15, 20, 45, 60, 90, 120, 300);
+        durationComboBox.setValue(60); // Set a default duration
+        durationComboBox.setStyle("-fx-font-size: 14px; -fx-background-color: #808080; -fx-padding: 5px;");
+         
+        return durationComboBox;
+    }
+
 
 }
