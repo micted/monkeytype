@@ -65,6 +65,59 @@ public class View1 {
         centerBox = createCenterBox();
         root.setCenter(centerBox);
         
+        
+            // Keyboard shortcuts footer
+        
+        Label restartLabel = new Label(" - Restart Test");
+        Label pauseLabel = new Label("Ctrl + Shift + P");
+        Label pause = new Label(" -Pause");
+        pauseLabel.getStyleClass().add("keyboard-label");
+        pauseLabel.setWrapText(true);
+        pauseLabel.setMaxWidth(60);
+        
+        
+        Label endTestLabel = new Label("Esc");
+        endTestLabel.getStyleClass().add("keyboard-label");
+        endTestLabel.setWrapText(true);
+        endTestLabel.setMaxWidth(60);
+        
+        
+        Label tabLabel = new Label("Tab");
+        tabLabel.getStyleClass().add("keyboard-label");
+        tabLabel.setWrapText(true);
+        tabLabel.setMaxWidth(60);
+
+        Label enterLabel = new Label("Enter");
+        enterLabel.getStyleClass().add("keyboard-label");
+        enterLabel.setWrapText(true);
+        enterLabel.setMaxWidth(60);
+
+        HBox shortcutsFooter = new HBox(tabLabel,enterLabel, restartLabel, pauseLabel, pause, endTestLabel);
+        shortcutsFooter.setSpacing(10);
+        shortcutsFooter.setAlignment(Pos.CENTER_RIGHT);
+        centerBox.getChildren().add(shortcutsFooter);
+
+        // ...
+
+        Scene scene = new Scene(root, 800, 600);
+
+        scene.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.P) {
+                // Ctrl + Shift + P - Pause
+                System.out.println("Pause");
+                // Call the pause method or perform the pause action here
+            } else if (event.getCode() == KeyCode.TAB && event.isShiftDown()) {
+                // Tab + Enter - Restart Test
+                System.out.println("Restart Test");
+                // Call the restart test method or perform the restart action here
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                // Esc - End Test
+                System.out.println("End Test");
+                // Call the end test method or perform the end test action here
+            }
+        });
+
+        
         //TIME SELECTION
         
         ComboBox<Integer> durationComboBox = createDurationComboBox();
@@ -97,7 +150,7 @@ public class View1 {
         });
         root.setTop(languageComboBox);
 
-        Scene scene = new Scene(root, 800, 600);
+       
         File cssFile = new File("C://Users//Hp//Documents//PJAIT documents//GUI//Monkeytype//MonkeyType_GUI//src//main//java//styles/styles.css");
         URL cssUrl = cssFile.toURI().toURL();
         

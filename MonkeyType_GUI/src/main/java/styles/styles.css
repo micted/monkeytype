@@ -37,3 +37,12 @@
     -fx-font-size: 18;
     -fx-fill: gray;
 }
+
+
+.keyboard-label {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #ccc;
+}
+
