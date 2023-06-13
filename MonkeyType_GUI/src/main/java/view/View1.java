@@ -19,10 +19,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.List;
+import javafx.animation.Timeline;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import model.Language;
 import model.TestResult1;
 import model.Word;
+import util.CountdownTimer;
 import util.JumpingLettersAnimation;
 
 public class View1 {
@@ -30,12 +33,19 @@ public class View1 {
     private TestController_1 testController;
     
     private ComboBox<Integer> durationComboBox;
+    
+    
+    private Label timerLabel;
+    
+    private Timeline countdownTimeline; 
 
 
     // GUI elements
     private Text testText;
     private TextArea userInputTextArea;
     private Text statisticsText;
+    
+    private Boolean isEndOfParagraph;
 
     private VBox centerBox; // Declare centerBox as a class-level variable
     private TextFlow userInputTextFlow;
@@ -49,8 +59,8 @@ public class View1 {
     public void initialize() throws MalformedURLException {
         primaryStage.setTitle("Monkeytype-like Application");
 
-        BorderPane root = new BorderPane();
-
+        BorderPane root = new BorderPane();       
+        
         // Center area for test text and user input
         centerBox = createCenterBox();
         root.setCenter(centerBox);
@@ -59,10 +69,20 @@ public class View1 {
         
         ComboBox<Integer> durationComboBox = createDurationComboBox();
         
+        
+         // Timer label
+        Label timerLabel = new Label();
+        timerLabel.setStyle("-fx-font-size: 18; -fx-text-fill: #000080;");
+        HBox timerBox = new HBox(timerLabel);
+        timerBox.setAlignment(Pos.TOP_RIGHT);
+        centerBox.getChildren().add(timerBox);
+        
         durationComboBox.setOnAction(event -> {
             int selectedDuration = durationComboBox.getValue();
             testController.setTestDuration(selectedDuration);
-            testController.generateNextParagraph(); // Generate a new paragraph when duration is changed
+            //testController.generateNextParagraph(); // Generate a new paragraph when duration is changed
+            
+            CountdownTimer.startCountdown(selectedDuration,timerLabel);
         });
         
         root.setBottom(durationComboBox);
@@ -71,7 +91,9 @@ public class View1 {
         ComboBox<Language> languageComboBox = createLanguageComboBox(); // Implement this method to create the language selection component
         languageComboBox.setOnAction(event -> {
             Language selectedLanguage = languageComboBox.getValue();
+            AppConfig.setSelectedLanguage(selectedLanguage);
             testController.selectLanguage(selectedLanguage);
+            isEndOfParagraph = false;
         });
         root.setTop(languageComboBox);
 
@@ -101,7 +123,8 @@ public class View1 {
             testText.setWrappingWidth(newWidth.doubleValue() - 20);
         }        
         });
-
+        
+        
 
         // Test text
         testText = new Text();
@@ -112,8 +135,33 @@ public class View1 {
         userInputTextArea = new TextArea();
         userInputTextArea.setWrapText(true);
         userInputTextArea.setStyle("-fx-font-size: 18");
-        userInputTextArea.setPrefRowCount(5);        
-        userInputTextArea.setOnKeyReleased(e -> testController.handleUserInput(userInputTextArea.getText()));
+        userInputTextArea.setPrefRowCount(5);      
+        
+        // Listen for key events in the user input text area
+        userInputTextArea.setOnKeyReleased(event -> {
+            String input = userInputTextArea.getText();
+
+            // Check if the event is triggered by the space bar key
+            if (event.getCode() == KeyCode.SPACE) {
+                AppConfig.setSpaceCount(AppConfig.getSpaceCount() + 1);
+                System.out.println("Space count: " + AppConfig.getSpaceCount());
+                
+                // Check if the space count is greater than 29
+                if (AppConfig.getSpaceCount() > 29) {
+                    testController.generateNextParagraph();
+                    AppConfig.setSpaceCount(0); // Reset the space count
+                    
+                    userInputTextArea.clear();
+                    
+                    userInputTextFlow.getChildren().clear();
+                    
+                }
+            }
+
+            // Call the handleUserInput method with the updated input
+            testController.handleUserInput(input);
+        });
+
         centerBox.getChildren().add(userInputTextArea);
 
         // User input text flow
@@ -147,7 +195,56 @@ public class View1 {
             String[] paragraphWords = AppConfig.getCurrentParagraph().split(" ");
             
             
+           for (int i = 0; i < paragraphWords.length; i++) {
+                
+                String paragraphWord = paragraphWords[i];
+                
 
+                for (int j = 0; j < paragraphWord.length(); j++) {
+                    char paragraphChar = paragraphWord.charAt(j);
+
+                    // Create a Text node for each character
+                    Text charText = new Text(String.valueOf(paragraphChar));
+                    JumpingLettersAnimation animation = new JumpingLettersAnimation(charText);
+
+                    // Apply the default style class
+                    charText.getStyleClass().add("default-text");
+
+                    // Check if the character has been entered correctly
+                    if (i < inputWords.length && j < inputWords[i].length()) {
+                        char userChar = inputWords[i].charAt(j);
+                        if (userChar == paragraphChar) {
+                            // Apply the "correct" style class
+                            charText.getStyleClass().add("correct-text");
+                        }                        
+                        
+                        else {
+                            // Apply the "incorrect" style class
+                            charText.getStyleClass().add("incorrect-text");
+                            animation.applyAnimation();
+                        }
+                    } else {
+                        // Character has not been entered yet, apply the "not-entered" style class
+                        charText.getStyleClass().add("not-entered-text");
+                        
+                        
+                    }
+
+                    // Add the Text node to the TextFlow
+                    userInputTextFlow.getChildren().add(charText);
+                    
+                    
+                }
+
+                // Add a space after each word
+                userInputTextFlow.getChildren().add(new Text(" "));
+            }
+            
+            
+            
+
+            
+            /*
             for (int i = 0; i < paragraphWords.length; i++) {
                 String paragraphWord = paragraphWords[i];
 
@@ -188,7 +285,8 @@ public class View1 {
 
                 // Add a space after each word
                 userInputTextFlow.getChildren().add(new Text(" "));
-            }
+            } 
+            */
         });
     }
 

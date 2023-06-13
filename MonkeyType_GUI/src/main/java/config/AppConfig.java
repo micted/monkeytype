@@ -4,6 +4,7 @@
  */
 package config;
 
+import model.Language;
 import view.View1;
 
 /**
@@ -14,6 +15,9 @@ public class AppConfig {
     private static AppConfig instance;
     private static View1 view;
     private static String paragraphText;
+    private static int duration;
+    private static Language selectedLanguage;
+    private static int spaceCount = 0;
 
     
     public static View1 getView() {
@@ -33,6 +37,36 @@ public class AppConfig {
         
         return paragraphText;
         
+    }
+    
+    public static void setTimer(int duration) {
+        
+        AppConfig.duration = duration;
+    
+    }
+    
+    public static int getTimer() {
+    
+        return duration;
+    }
+    
+    public static void setSpaceCount(int spaceCount) {
+        
+        AppConfig.spaceCount = spaceCount;
+    
+    }
+    
+    public static int getSpaceCount() {
+    
+        return spaceCount;
+    }
+    
+    public static void setSelectedLanguage(Language language) {
+        AppConfig.selectedLanguage = language;
+}
+
+    public static Language getSelectedLanguage() {
+        return selectedLanguage;
     }
 }
 

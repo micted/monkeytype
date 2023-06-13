@@ -133,7 +133,8 @@ public class TestController_1 {
     public void handleUserInput(String input) {
         System.out.println("handler called");
         System.out.println("This is the user input so far"+ " " + input);
-        userInput = new StringBuilder(input);
+        userInput = new StringBuilder(input);        
+        
         updateView();
         /*
         if (paragraph != null && !paragraph.isEmpty()) {
@@ -226,7 +227,7 @@ public class TestController_1 {
     }
 
     public void generateNextParagraph() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        selectLanguage(AppConfig.getSelectedLanguage());
     }
 
     
