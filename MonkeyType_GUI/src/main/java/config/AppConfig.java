@@ -18,6 +18,9 @@ public class AppConfig {
     private static int duration;
     private static Language selectedLanguage;
     private static int spaceCount = 0;
+    private static int incorrectCount = 0;
+    private static int correctCount = 0;
+    private static int missedCount = 0;
 
     
     public static View1 getView() {
@@ -67,6 +70,23 @@ public class AppConfig {
 
     public static Language getSelectedLanguage() {
         return selectedLanguage;
+    }
+    
+    public static void setIncorrectCount(int incorrectCount) {
+        AppConfig.incorrectCount = incorrectCount;
+    }
+    
+    public static int getIncorrectCount() {
+        return incorrectCount;
+    }
+    
+    public static void setcorrectCount(int correctCount) {
+        AppConfig.correctCount = correctCount;
+    }
+    
+    
+    public static int getcorrectCount() {
+        return correctCount;
     }
 }
 

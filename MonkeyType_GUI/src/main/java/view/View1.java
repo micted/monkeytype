@@ -45,6 +45,7 @@ public class View1 {
     private TextArea userInputTextArea;
     private Text statisticsText;
     
+    
     private Boolean isEndOfParagraph;
 
     private VBox centerBox; // Declare centerBox as a class-level variable
@@ -146,6 +147,7 @@ public class View1 {
             Language selectedLanguage = languageComboBox.getValue();
             AppConfig.setSelectedLanguage(selectedLanguage);
             testController.selectLanguage(selectedLanguage);
+            
             isEndOfParagraph = false;
         });
         root.setTop(languageComboBox);
@@ -237,7 +239,9 @@ public class View1 {
     
     public void updateInputTextArea(String input) {
         Platform.runLater(() -> {
-            //userInputTextArea.setText(input);
+            
+            AppConfig.setIncorrectCount(0);
+            AppConfig.setcorrectCount(0);
 
             // Clear the existing content in the TextFlow
             userInputTextFlow.getChildren().clear();
@@ -246,6 +250,8 @@ public class View1 {
             String[] inputWords = input.split(" ");
             System.out.println();            
             String[] paragraphWords = AppConfig.getCurrentParagraph().split(" ");
+            
+            
             
             
            for (int i = 0; i < paragraphWords.length; i++) {
@@ -268,13 +274,20 @@ public class View1 {
                         char userChar = inputWords[i].charAt(j);
                         if (userChar == paragraphChar) {
                             // Apply the "correct" style class
+                            
                             charText.getStyleClass().add("correct-text");
+                            AppConfig.setcorrectCount(AppConfig.getcorrectCount()+1);
+                            System.out.println("this is correct count" + " " + AppConfig.getcorrectCount());
                         }                        
                         
                         else {
+                            AppConfig.setIncorrectCount(AppConfig.getIncorrectCount()+1);
+                            System.out.println("this is incorrect count" + " " + AppConfig.getIncorrectCount());
                             // Apply the "incorrect" style class
                             charText.getStyleClass().add("incorrect-text");
                             animation.applyAnimation();
+                                                                                   
+                            
                         }
                     } else {
                         // Character has not been entered yet, apply the "not-entered" style class
