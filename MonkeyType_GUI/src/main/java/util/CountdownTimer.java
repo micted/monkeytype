@@ -12,36 +12,37 @@ import javafx.util.Duration;
 
 
 public class CountdownTimer {
-    
+
     private static Timeline countdownTimeline;
     private static int duration = AppConfig.getTimer();
-    
-    public static void startCountdown(int duration, Label timerLabel) {
-        
+
+    public static void startCountdown(int duration, Label timerLabel, Runnable onTimeUp) {
+
         AppConfig.setTimer(duration);
-        
+
         if (countdownTimeline != null) {
             countdownTimeline.stop();
         }
 
         countdownTimeline = new Timeline();
         countdownTimeline.setCycleCount(Timeline.INDEFINITE);
-        
+
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
-            AppConfig.setTimer(AppConfig.getTimer()-1);
+            AppConfig.setTimer(AppConfig.getTimer() - 1);
             if (AppConfig.getTimer() >= 0) {
                 timerLabel.setText("Time Remaining: " + AppConfig.getTimer() + "s");
             } else {
                 timerLabel.setText("Time's up!");
+                int totalTyped = AppConfig.getcorrectCount() + AppConfig.getIncorrectCount();
+                System.out.println("here is total typed" + " " + totalTyped);
+                AppConfig.setTotalTyped(totalTyped);
+                AppConfig.setWPM(totalTyped / duration);
                 countdownTimeline.stop();
+                onTimeUp.run(); // Call the onTimeUp callback
             }
         });
 
         countdownTimeline.getKeyFrames().add(keyFrame);
         countdownTimeline.play();
-        
-        
-    
     }
-    
 }

@@ -29,5 +29,6 @@ public class Main extends Application {
         view1.initialize();
         System.out.println(view1);
     }
+
 }
 

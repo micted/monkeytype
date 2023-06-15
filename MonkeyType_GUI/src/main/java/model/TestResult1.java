@@ -1,5 +1,7 @@
 package model;
 
+import config.AppConfig;
+
 public class TestResult1 {
     private int correctCount;
     private int incorrectCount;
@@ -9,8 +11,8 @@ public class TestResult1 {
 
     public TestResult1() {
         // Initialize the counts to zero
-        correctCount = 0;
-        incorrectCount = 0;
+        correctCount = AppConfig.getcorrectCount();
+        incorrectCount = AppConfig.getIncorrectCount();
         extraCount = 0;
         missedCount = 0;
         accuracy = 0;

@@ -13,6 +13,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.paint.Color;
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+
 import controller.TestController_1;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -20,6 +24,7 @@ import java.net.URL;
 
 import java.util.List;
 import javafx.animation.Timeline;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import model.Language;
@@ -46,6 +51,14 @@ public class View1 {
     private Text statisticsText;
     
     
+    // Statistics line chart
+    private LineChart<String, Number> statisticsLineChart;
+    private XYChart.Series<String, Number> totalTypedSeries;
+    private XYChart.Series<String, Number> wpmSeries;
+    private XYChart.Series<String, Number> correctSeries;
+    private XYChart.Series<String, Number> incorrectSeries;
+    
+    
     private Boolean isEndOfParagraph;
 
     private VBox centerBox; // Declare centerBox as a class-level variable
@@ -60,7 +73,14 @@ public class View1 {
     public void initialize() throws MalformedURLException {
         primaryStage.setTitle("Monkeytype-like Application");
 
-        BorderPane root = new BorderPane();       
+        BorderPane root = new BorderPane(); 
+        AppConfig.setTotalTyped(0);
+        AppConfig.setWPM(0.0);
+         
+
+        // Initialize the statistics line chart
+        initializeStatisticsLineChart();
+        
         
         // Center area for test text and user input
         centerBox = createCenterBox();
@@ -136,7 +156,7 @@ public class View1 {
             testController.setTestDuration(selectedDuration);
             //testController.generateNextParagraph(); // Generate a new paragraph when duration is changed
             
-            CountdownTimer.startCountdown(selectedDuration,timerLabel);
+            CountdownTimer.startCountdown(selectedDuration,timerLabel,this::onTimeUp);
         });
         
         root.setBottom(durationComboBox);
@@ -203,6 +223,7 @@ public class View1 {
                 
                 // Check if the space count is greater than 29
                 if (AppConfig.getSpaceCount() > 29) {
+                    
                     testController.generateNextParagraph();
                     AppConfig.setSpaceCount(0); // Reset the space count
                     
@@ -305,71 +326,59 @@ public class View1 {
                 // Add a space after each word
                 userInputTextFlow.getChildren().add(new Text(" "));
             }
+           
             
             
-            
 
-            
-            /*
-            for (int i = 0; i < paragraphWords.length; i++) {
-                String paragraphWord = paragraphWords[i];
-
-                // Create a Text node for each word
-                Text wordText = new Text(paragraphWord);
-                JumpingLettersAnimation animation = new JumpingLettersAnimation(wordText);
-                
-
-                // Apply the default style class
-                wordText.getStyleClass().add("default-text");
-
-                // Check if the word has been entered by the user
-                if (i < inputWords.length) {
-                    String userWord = inputWords[i];
-
-                    // Check each character in the word
-                    for (int j = 0; j < paragraphWord.length(); j++) {
-                        char paragraphChar = paragraphWord.charAt(j);
-
-                        // Check if the character is correctly entered
-                        if (j < userWord.length() && userWord.charAt(j) == paragraphChar) {
-                            // Apply the "correct" style class
-                            wordText.getStyleClass().add("correct-text");
-                            
-                        } else {
-                            // Apply the "incorrect" style class
-                            wordText.getStyleClass().add("incorrect-text");
-                            animation.applyAnimation();
-                        }
-                    }
-                } else {
-                    // Word has not been entered yet, apply the "not-entered" style class
-                    wordText.getStyleClass().add("not-entered-text");
-                }
-
-                // Add the Text node to the TextFlow
-                userInputTextFlow.getChildren().add(wordText);
-
-                // Add a space after each word
-                userInputTextFlow.getChildren().add(new Text(" "));
-            } 
-            */
+           
         });
     }
 
+    
+    
+    
+    
+    
+    
+    private void initializeStatisticsLineChart() {
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Value");
 
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Time");
 
-   
+        statisticsLineChart = new LineChart<>(xAxis, yAxis);
+        statisticsLineChart.setTitle("Statistics");
+
+        totalTypedSeries = new XYChart.Series<>();
+        totalTypedSeries.setName("Total Typed");
+
+        wpmSeries = new XYChart.Series<>();
+        wpmSeries.setName("WPM");
+
+        correctSeries = new XYChart.Series<>();
+        correctSeries.setName("Correct");
+
+        incorrectSeries = new XYChart.Series<>();
+        incorrectSeries.setName("Incorrect");
+
+        statisticsLineChart.getData().addAll(totalTypedSeries, wpmSeries, correctSeries, incorrectSeries);
+    }
+    
+    
 
     public void updateStatistics(TestResult1 testResult) {
         Platform.runLater(() -> {
-            String statistics = "Correct: " + testResult.getCorrectCount() +
-                    "  Incorrect: " + testResult.getIncorrectCount() +
+            String statistics = "Correct: " + AppConfig.getcorrectCount() +
+                    "  Incorrect: " + AppConfig.getIncorrectCount() +
                     "  Extra: " + testResult.getExtraCount() +
                     "  Missed: " + testResult.getMissedCount() +
-                    "  Accuracy: " + testResult.getAccuracy() + "%";
+                    "  WPM: " + AppConfig.getWPM();
             statisticsText.setText(statistics);
         });
     }
+    
+    
     
     
     private ComboBox<Language> createLanguageComboBox() {
@@ -398,6 +407,22 @@ public class View1 {
          
         return durationComboBox;
     }
+
+    private void onTimeUp() {
+         // Display statistics
+         TestResult1 testResult = new TestResult1();
+         updateStatistics(testResult);
+
+         double wpm = AppConfig.getdoubleWPM();
+        int correctCount = AppConfig.getcorrectCount();
+        int incorrectCount = AppConfig.getIncorrectCount();
+        int totalTyped = AppConfig.getTotalTyped();
+
+        ChartDisplay chartDisplay = new ChartDisplay();
+        chartDisplay.displayChart(wpm, correctCount, incorrectCount, totalTyped);
+
+        
+     }
 
 
 }

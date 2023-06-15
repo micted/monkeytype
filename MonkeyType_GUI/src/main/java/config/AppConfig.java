@@ -21,6 +21,8 @@ public class AppConfig {
     private static int incorrectCount = 0;
     private static int correctCount = 0;
     private static int missedCount = 0;
+    private static int totalTyped = 0;
+    private static double wpm = 0;
 
     
     public static View1 getView() {
@@ -88,5 +90,31 @@ public class AppConfig {
     public static int getcorrectCount() {
         return correctCount;
     }
+    
+    public static void setTotalTyped(int totalTyped) {
+        AppConfig.totalTyped = totalTyped;
+    }
+    
+    public static int getTotalTyped() {
+        
+        return totalTyped;
+    
+    }
+    
+    public static void setWPM(double wpm) {
+        AppConfig.wpm = wpm;
+    }
+   
+
+    public static String getWPM() {
+        return String.valueOf(wpm);
+    }
+    
+    public static double getdoubleWPM() {
+        return wpm;
+    }
+
+
+   
 }
 
