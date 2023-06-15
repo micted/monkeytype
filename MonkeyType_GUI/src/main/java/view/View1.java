@@ -21,6 +21,7 @@ import controller.TestController_1;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import java.util.List;
 import javafx.animation.Timeline;
@@ -32,6 +33,7 @@ import model.TestResult1;
 import model.Word;
 import util.CountdownTimer;
 import util.JumpingLettersAnimation;
+import util.TestResultGenerator;
 
 public class View1 {
     private Stage primaryStage;
@@ -126,15 +128,17 @@ public class View1 {
             if (event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.P) {
                 // Ctrl + Shift + P - Pause
                 System.out.println("Pause");
-                // Call the pause method or perform the pause action here
-            } else if (event.getCode() == KeyCode.TAB && event.isShiftDown()) {
+                pauseTest();
+                
+            } else if (event.getCode() == KeyCode.P && event.isShiftDown()) {
                 // Tab + Enter - Restart Test
                 System.out.println("Restart Test");
-                // Call the restart test method or perform the restart action here
+                restartTest();
+                
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 // Esc - End Test
-                System.out.println("End Test");
-                // Call the end test method or perform the end test action here
+                System.out.println("End Test");                
+                onTimeUp();
             }
         });
 
@@ -154,7 +158,7 @@ public class View1 {
         durationComboBox.setOnAction(event -> {
             int selectedDuration = durationComboBox.getValue();
             testController.setTestDuration(selectedDuration);
-            //testController.generateNextParagraph(); // Generate a new paragraph when duration is changed
+            //testController.generateNextParagraph();
             
             CountdownTimer.startCountdown(selectedDuration,timerLabel,this::onTimeUp);
         });
@@ -162,7 +166,7 @@ public class View1 {
         root.setBottom(durationComboBox);
         
         // Language selection
-        ComboBox<Language> languageComboBox = createLanguageComboBox(); // Implement this method to create the language selection component
+        ComboBox<Language> languageComboBox = createLanguageComboBox(); 
         languageComboBox.setOnAction(event -> {
             Language selectedLanguage = languageComboBox.getValue();
             AppConfig.setSelectedLanguage(selectedLanguage);
@@ -177,13 +181,11 @@ public class View1 {
         URL cssUrl = cssFile.toURI().toURL();
         
         scene.getStylesheets().add(cssUrl.toExternalForm());
-        //scene.getStylesheets().add(view.View1.class.getResource("/styles.css").toExternalForm());
+        
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // Generate and display test text
-        //String dummyParagraph = "This is a dummy paragraph for testing color variation.";
-        //displayTestText(dummyParagraph);
+       
     }
 
 
@@ -200,7 +202,6 @@ public class View1 {
         });
         
         
-
         // Test text
         testText = new Text();
         testText.setStyle("-fx-font-size: 20");
@@ -234,7 +235,7 @@ public class View1 {
                 }
             }
 
-            // Call the handleUserInput method with the updated input
+           
             testController.handleUserInput(input);
         });
 
@@ -372,7 +373,7 @@ public class View1 {
             String statistics = "Correct: " + AppConfig.getcorrectCount() +
                     "  Incorrect: " + AppConfig.getIncorrectCount() +
                     "  Extra: " + testResult.getExtraCount() +
-                    "  Missed: " + testResult.getMissedCount() +
+                    "  Accuracy: " + (AppConfig.getcorrectCount()*100)/AppConfig.getTotalTyped() + "%" +" "+
                     "  WPM: " + AppConfig.getWPM();
             statisticsText.setText(statistics);
         });
@@ -390,7 +391,7 @@ public class View1 {
         // Add available languages to the combo box
         languageComboBox.getItems().addAll(availableLanguages);
 
-        // Set a default selection
+        // default selection
         if (!availableLanguages.isEmpty()) {
             languageComboBox.setValue(availableLanguages.get(0));
         }
@@ -413,16 +414,39 @@ public class View1 {
          TestResult1 testResult = new TestResult1();
          updateStatistics(testResult);
 
-         double wpm = AppConfig.getdoubleWPM();
+        
+        double wpm = AppConfig.getdoubleWPM();
         int correctCount = AppConfig.getcorrectCount();
         int incorrectCount = AppConfig.getIncorrectCount();
         int totalTyped = AppConfig.getTotalTyped();
+//        double accuracy = (AppConfig.getcorrectCount()*100)/totalTyped;
 
         ChartDisplay chartDisplay = new ChartDisplay();
         chartDisplay.displayChart(wpm, correctCount, incorrectCount, totalTyped);
+        
+        
+        //FILE GENERATOR
+        String directory = "C://Users//Hp//Documents//PJAIT documents//GUI//Monkeytype//MonkeyType_GUI//src//main//java//txt";
+        TestResultGenerator.generateTestResult(wpm, correctCount, incorrectCount,directory);
+        
+
 
         
-     }
+    }
+    
+    private void restartTest() {
+        
+        testController.generateNextParagraph();
+        AppConfig.setSpaceCount(0); 
+        userInputTextArea.clear();
+        userInputTextFlow.getChildren().clear();
+    }
+    
+    // Pause the test
+    private void pauseTest() {
+        
+        CountdownTimer.pauseCountdown(); 
+    }
 
 
 }

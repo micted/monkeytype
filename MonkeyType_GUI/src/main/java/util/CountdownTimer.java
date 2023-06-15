@@ -15,6 +15,7 @@ public class CountdownTimer {
 
     private static Timeline countdownTimeline;
     private static int duration = AppConfig.getTimer();
+    private static boolean isPaused;
 
     public static void startCountdown(int duration, Label timerLabel, Runnable onTimeUp) {
 
@@ -36,7 +37,7 @@ public class CountdownTimer {
                 int totalTyped = AppConfig.getcorrectCount() + AppConfig.getIncorrectCount();
                 System.out.println("here is total typed" + " " + totalTyped);
                 AppConfig.setTotalTyped(totalTyped);
-                AppConfig.setWPM(totalTyped / duration);
+                AppConfig.setWPM(totalTyped*60/ duration);
                 countdownTimeline.stop();
                 onTimeUp.run(); // Call the onTimeUp callback
             }
@@ -45,4 +46,19 @@ public class CountdownTimer {
         countdownTimeline.getKeyFrames().add(keyFrame);
         countdownTimeline.play();
     }
+    
+    public static void pauseCountdown() {
+        isPaused = true;
+        if (countdownTimeline != null) {
+            countdownTimeline.pause();
+        }
+    }
+
+    public static void resumeCountdown() {
+        isPaused = false;
+        if (countdownTimeline != null) {
+            countdownTimeline.play();
+        }
+    }
+    
 }

@@ -1,0 +1,5 @@
+Test Result
+ACCURACY: 0.0
+WPM: 12.0
+Correct Count: 0
+Incorrect Count: 4

@@ -1,0 +1,4 @@
+Test Result
+WPM: 18.0
+Correct Count: 0
+Incorrect Count: 6

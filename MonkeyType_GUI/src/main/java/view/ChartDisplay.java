@@ -19,6 +19,7 @@ public class ChartDisplay {
         lineChart.setTitle("Statistics");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
+        
         series.getData().add(new XYChart.Data<>("WPM", wpm));
         series.getData().add(new XYChart.Data<>("Correct", correctCount));
         series.getData().add(new XYChart.Data<>("Incorrect", incorrectCount));
