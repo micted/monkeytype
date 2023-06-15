@@ -1,45 +1,62 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
+
+import config.AppConfig;
 
 public class TestResult {
     private int correctCount;
     private int incorrectCount;
     private int extraCount;
     private int missedCount;
+    private int accuracy;
 
-    public TestResult(int correctCount, int incorrectCount, int extraCount, int missedCount) {
-        this.correctCount = correctCount;
-        this.incorrectCount = incorrectCount;
-        this.extraCount = extraCount;
-        this.missedCount = missedCount;
+    public TestResult() {
+        // Initialize the counts to zero
+        correctCount = AppConfig.getcorrectCount();
+        incorrectCount = AppConfig.getIncorrectCount();
+        extraCount = 0;
+        missedCount = 0;
+        accuracy = 0;
     }
+
+    // Getters and setters for the fields
 
     public int getCorrectCount() {
         return correctCount;
+    }
+
+    public void setCorrectCount(int correctCount) {
+        this.correctCount = correctCount;
     }
 
     public int getIncorrectCount() {
         return incorrectCount;
     }
 
+    public void setIncorrectCount(int incorrectCount) {
+        this.incorrectCount = incorrectCount;
+    }
+
     public int getExtraCount() {
         return extraCount;
+    }
+
+    public void setExtraCount(int extraCount) {
+        this.extraCount = extraCount;
     }
 
     public int getMissedCount() {
         return missedCount;
     }
 
-    public double getAccuracy() {
-        int totalCount = correctCount + incorrectCount + extraCount + missedCount;
-        if (totalCount > 0) {
-            return (double) correctCount / totalCount * 100;
-        } else {
-            return 0;
-        }
+    public void setMissedCount(int missedCount) {
+        this.missedCount = missedCount;
+    }
+
+    public int getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(int accuracy) {
+        this.accuracy = accuracy;
     }
 }
-

@@ -5,7 +5,7 @@
 package config;
 
 import model.Language;
-import view.View1;
+import view.View;
 
 /**
  *
@@ -13,7 +13,7 @@ import view.View1;
  */
 public class AppConfig {
     private static AppConfig instance;
-    private static View1 view;
+    private static View view;
     private static String paragraphText;
     private static int duration;
     private static Language selectedLanguage;
@@ -25,11 +25,11 @@ public class AppConfig {
     private static double wpm = 0;
 
     
-    public static View1 getView() {
+    public static View getView() {
         return view;
     }
 
-    public static void setView(View1 view) {
+    public static void setView(View view) {
         AppConfig.view = view;
     }
     

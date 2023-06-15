@@ -11,7 +11,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import controller.TestController;
-import controller.TestController_1;
+import controller.TestController;
 import java.net.MalformedURLException;
 
 
@@ -23,8 +23,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws MalformedURLException {
         
-        //TestController_1 testController = new TestController_1();
-        View1 view1 = new View1(primaryStage);
+        //TestController_1 testController = new TestController();
+        View view1 = new View(primaryStage);
         AppConfig.setView(view1);
         view1.initialize();
         System.out.println(view1);
